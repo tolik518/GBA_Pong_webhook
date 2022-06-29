@@ -1,0 +1,3 @@
+code/src/artifacts/*.zip
+code/src/.env_prd
+code/src/.env_dev
