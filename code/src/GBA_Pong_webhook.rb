@@ -20,7 +20,7 @@ post '/GBA_Pong_webhook' do
         url        = json_af["artifacts"][0]["archive_download_url"]
         created_at = json_af["artifacts"][0]["created_at"]
         sha        = json["workflow_run"]["head_sha"]
-        file_name = ENV["FOLDER"] + created_at + "_" + sha +".zip"
+        file_name  = ENV["FOLDER"] + created_at + "_" + sha +".zip"
 
         File.open(file_name, "wb") do |f| 
             f.write HTTParty.get(url,
