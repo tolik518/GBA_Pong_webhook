@@ -13,7 +13,9 @@ post '/GBA_Pong_webhook' do
     verify_signature(payload_body)
     json = JSON.parse(payload_body)
 
-    if json["action"] == "completed" and json["workflow_run"]["name"] == "Compile GBA" and json["workflow_run"]["conclusion"] == "success"
+    is_successful = json["action"] == "completed" and json["workflow_run"]["name"] == "Compile GBA" and json["workflow_run"]["conclusion"] == "success"
+
+    if is_successful
         response = HTTParty.get(json["workflow_run"]["artifacts_url"])
         json_af = JSON.parse(response.body)
 
@@ -24,9 +26,7 @@ post '/GBA_Pong_webhook' do
 
         File.open(file_name, "wb") do |f| 
             f.write HTTParty.get(url,
-                headers: {
-                    "Authorization" => "token " + ENV["TOKEN"]
-                }
+                headers: { "Authorization" => "token " + ENV["TOKEN"] }
             ).body
 
             puts "Downloaded artifact"
