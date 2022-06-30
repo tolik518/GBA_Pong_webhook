@@ -1,11 +1,17 @@
-require 'sinatra'
-require 'json'
-require 'httparty'
-require 'dotenv'
+require 'sinatra'  # to get the POST request
+require 'json'     # parse JSON
+require 'httparty' # go tothe artifacts_url and download the artifact
+require 'dotenv'   # load the .env file
 
+# load the environment file containing secret variables
 Dotenv.load(".env_prd")
 
+# needed for sinatra to work properly in my local environment
 set :bind, '0.0.0.0'
+
+# --------------------------------------- #
+#                routes                   #
+# --------------------------------------- #
 
 post '/GBA_Pong_webhook' do
     request.body.rewind
@@ -13,30 +19,45 @@ post '/GBA_Pong_webhook' do
     verify_signature(payload_body)
     json = JSON.parse(payload_body)
 
-    is_successful = json["action"] == "completed" and json["workflow_run"]["name"] == "Compile GBA" and json["workflow_run"]["conclusion"] == "success"
+    workflow = json["workflow_run"]
 
+    is_successful = (json["action"] == "completed" and workflow["name"] == "Compile GBA" and workflow["conclusion"] == "success")
+
+    # proceed only when 'Compile GBA'-workflow was as 'success'
     if is_successful
-        response = HTTParty.get(json["workflow_run"]["artifacts_url"])
-        json_af = JSON.parse(response.body)
+        response = HTTParty.get(workflow["artifacts_url"])
+        json_af  = JSON.parse(response.body)
+        # [0] -> because we get an array of artifacts back - which consists only of one item though
+        artifact = json_af["artifacts"][0]
 
-        url        = json_af["artifacts"][0]["archive_download_url"]
-        created_at = json_af["artifacts"][0]["created_at"]
-        sha        = json["workflow_run"]["head_sha"]
+        file_url   = artifact["archive_download_url"]
+        created_at = artifact["created_at"]
+        sha        = workflow["head_sha"] # this is the commit hash
         file_name  = ENV["FOLDER"] + created_at + "_" + sha +".zip"
 
-        File.open(file_name, "wb") do |f| 
-            f.write HTTParty.get(url,
-                headers: { "Authorization" => "token " + ENV["TOKEN"] }
-            ).body
-
-            puts "Downloaded artifact"
-            puts File.size(file_name)
-        end
+        download(file_name, file_url)
     end
 end
 
 get '/GBA_Pong_webhook' do
     "Is this thing on?"
+end
+
+# --------------------------------------- #
+#           Helper functions              #
+# --------------------------------------- #
+
+def download(file_name, file_url)
+    File.open(file_name, "wb") do |f| 
+        f.write HTTParty.get(
+            file_url,
+            # we need the auth token, otherwise we have no rights to access the artifact
+            headers: { "Authorization" => "token " + ENV["TOKEN"] } 
+        ).body
+
+        puts "Downloaded artifact"
+        puts "File size: " + File.size(file_name)
+    end
 end
   
 def verify_signature(payload_body)
