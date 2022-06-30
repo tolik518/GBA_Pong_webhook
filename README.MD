@@ -1,4 +1,4 @@
-This is the webhook-script I'm using to download the [artifacts](https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts) from the [GBA Pong repository](https://github.com/tolik518/GBA_Pong) and to upload them on my server - resulting in a archive of nighly builds.
+This is the webhook-script I'm using to download the [artifacts](https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts) from the [GBA Pong repository](https://github.com/tolik518/GBA_Pong) and to upload them [on my server](https://returnnull.de/github/GBA_Pong/) - resulting in an archive of nighly builds.
 
 I've added a [Makefile](/Makefile) and a Dockerfile for [php](/docker/php/Dockerfile) and for [ruby](/docker/ruby/Dockerfile).  
 So you can fire it up by just calling `make build_images` and `make run` afterwards in your terminal (asuming you got `make` and `docker` installed).
