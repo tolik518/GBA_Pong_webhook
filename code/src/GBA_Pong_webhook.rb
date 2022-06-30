@@ -10,7 +10,7 @@ Dotenv.load(".env_prd")
 set :bind, '0.0.0.0'
 
 # --------------------------------------- #
-#                routes                   #
+#                  routes                 #
 # --------------------------------------- #
 
 post '/GBA_Pong_webhook' do
@@ -44,7 +44,7 @@ get '/GBA_Pong_webhook' do
 end
 
 # --------------------------------------- #
-#           Helper functions              #
+#            Helper functions             #
 # --------------------------------------- #
 
 def download(file_name, file_url)
@@ -61,6 +61,14 @@ def download(file_name, file_url)
 end
   
 def verify_signature(payload_body)
-    signature = 'sha256=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), ENV["SECRET"], payload_body)
-    return halt 518, "Bad secret." unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE_256'])
+    signature = 'sha256=' + OpenSSL::HMAC.hexdigest(
+        OpenSSL::Digest.new('sha256'), 
+        ENV["SECRET"], 
+        payload_body
+    )
+    
+    return halt 518, "Bad secret." unless Rack::Utils.secure_compare(
+        signature,
+        request.env['HTTP_X_HUB_SIGNATURE_256']
+    )
 end
