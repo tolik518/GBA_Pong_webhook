@@ -33,7 +33,7 @@ post '/GBA_Pong_webhook' do
         file_url   = artifact["archive_download_url"]
         created_at = artifact["created_at"]
         sha        = workflow["head_sha"] # this is the commit hash
-        file_name  = ENV["FOLDER"] + created_at + "_" + sha +".zip"
+        file_name  = ENV["FOLDER"] + "#{created_at}_#{sha}.zip"
 
         download(file_name, file_url)
     end
@@ -55,8 +55,10 @@ def download(file_name, file_url)
             headers: { "Authorization" => "token " + ENV["TOKEN"] } 
         ).body
 
+        file_size = File.size(file_name)/1024;
+
         puts "Downloaded artifact"
-        puts "File size: " + File.size(file_name)
+        puts "File size: #{file_size} KB"
     end
 end
   
