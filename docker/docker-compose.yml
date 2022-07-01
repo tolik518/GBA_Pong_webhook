@@ -5,8 +5,9 @@ services:
     container_name: webhook_ruby
     volumes:
       - ${pwd}/code/src:/code/src
+      - ${pwd}/.env_prd:/.env_prd
     working_dir: /code/src
-    entrypoint: ruby /code/src/GBA_Pong_webhook.rb p ENV["API_KEY"]
+    entrypoint: sh -c "chmod +x run.sh && ./run.sh"
     ports:
       - '4567:4567'
 

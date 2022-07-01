@@ -1,0 +1,9 @@
+source "https://rubygems.org"  # where gems will be downloaded from
+ruby "3.0.4"  # ruby version, change for the one you use
+
+gem "sinatra"
+gem "sinatra-reloader"
+gem "sinatra-contrib"
+gem "thin"
+gem "httparty"
+gem "dotenv"
