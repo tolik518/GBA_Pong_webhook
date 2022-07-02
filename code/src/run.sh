@@ -1,2 +1,2 @@
 #!/bin/sh
-bundle install && ruby $(pwd)/GBA_Pong_webhook.rb
+bundle install && ruby $(pwd)/index.rb

@@ -1,0 +1,23 @@
+
+<h1>GBA Pong nightly builds</h1>
+
+<table>
+    <tr>
+        <th style='border-bottom: 1px solid grey;'>/</th>
+        <th style='border-bottom: 1px solid grey; border-right: 1px solid grey'>file name</th>
+        <th style='border-bottom: 1px solid grey; border-right: 1px solid grey'>file size</th>
+        <th style='border-bottom: 1px solid grey; border-right: 1px solid grey'>upload date</th>
+    </tr>
+    <% @file_names.zip(@file_sizes, @upload_dates).each do |file_name, file_size, upload_date| %>
+        <tr>
+            <td style='border-bottom: 1px solid grey;'><img src='/../gba_icon_small.png'></td>
+            <td style='border-bottom: 1px solid grey; border-right: 1px solid grey'>
+                <a href='<%= file_name %>'><%= file_name %></a>
+            </td>
+            <td style='border-bottom: 1px solid grey; border-right: 1px solid grey'><%= file_size %></td>
+            <td style='border-bottom: 1px solid grey; border-right: 1px solid grey'><%= upload_date %></td>
+        </tr>
+    <% end %>
+</table>
+
+<pre>Ruby</pre>

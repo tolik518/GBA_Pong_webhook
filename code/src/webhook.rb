@@ -1,20 +1,4 @@
-require 'sinatra'         # to get the POST request
-require 'sinatra/reloader'# reload the server without restarting it
-require 'json'            # parse JSON
-require 'httparty'        # go tothe artifacts_url and download the artifact
-require 'dotenv'          # load the .env file
-
-# load the environment file containing secret variables
-Dotenv.load("../../.env_prd")
-
-# needed for sinatra to work properly in my local environment
-set :bind, '0.0.0.0'
-
-# --------------------------------------- #
-#                  routes                 #
-# --------------------------------------- #
-
-post '/GBA_Pong_webhook' do
+def getpayload()
     request.body.rewind
     payload_body = request.body.read
     verify_signature(payload_body)
@@ -38,10 +22,6 @@ post '/GBA_Pong_webhook' do
 
         download(file_name, file_url)
     end
-end
-
-get '/GBA_Pong_webhook' do
-    "Is this thing on?"
 end
 
 # --------------------------------------- #

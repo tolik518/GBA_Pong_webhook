@@ -10,13 +10,3 @@ services:
     entrypoint: sh -c "chmod +x run.sh && ./run.sh"
     ports:
       - '4567:4567'
-
-  php:
-    image: webhook/php:dev
-    container_name: webhook_php
-    volumes:
-       - ${pwd}/code/src/artifacts:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: php -S 0.0.0.0:80 -t /var/www/html
-    ports:
-      - '80:80'
