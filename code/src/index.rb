@@ -1,8 +1,9 @@
-require 'sinatra'         # to get the POST request
-require 'sinatra/reloader'# reload the server without restarting it
-require 'json'            # parse JSON
-require 'httparty'        # go tothe artifacts_url and download the artifact
-require 'dotenv'          # load the .env file
+require 'sinatra'               # to get the POST request
+require 'sinatra/reloader'      # reload the server without restarting it
+require 'sinatra/static_assets' # show static images 
+require 'json'                  # parse JSON
+require 'httparty'              # go tothe artifacts_url and download the artifact
+require 'dotenv'                # load the .env file
 
 require_relative 'webhook.rb'
 
@@ -25,7 +26,8 @@ get '/github/GBA_Pong_webhook' do
     "Is this thing on?"
 end
 
-get '/github/GBA_Pong' do
+get '/github/GBA_Pong/' do
+    # we only want to show the zip files
     @files_full = Dir.glob(ENV['FOLDER']+"*.zip")
 
     @file_sizes   = @files_full.map { |file| "#{(File.size(file)/1024.0).round(2)} KB" }

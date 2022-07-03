@@ -10,7 +10,7 @@
     </tr>
     <% @file_names.zip(@file_sizes, @upload_dates).each do |file_name, file_size, upload_date| %>
         <tr>
-            <td style='border-bottom: 1px solid grey;'><img src='/../gba_icon_small.png'></td>
+            <td style='border-bottom: 1px solid grey;'><%= image_tag("/github/GBA_Pong/gba_icon_small.png", :alt => "GBA") %></td>
             <td style='border-bottom: 1px solid grey; border-right: 1px solid grey'>
                 <a href='<%= file_name %>'><%= file_name %></a>
             </td>
