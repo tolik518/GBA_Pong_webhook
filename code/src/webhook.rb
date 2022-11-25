@@ -17,7 +17,7 @@ def getpayload()
 
         file_url   = artifact["archive_download_url"]
         created_at = artifact["created_at"]
-        sha        = workflow["head_sha"] # this is the commit hash
+        sha        = workflow["head_sha"][0...7] # this is the commit hash, we only want the first 7 chars
         file_name  = ENV["FOLDER"] + "#{created_at}_#{sha}.zip"
 
         download(file_name, file_url)
@@ -29,11 +29,11 @@ end
 # --------------------------------------- #
 
 def download(file_name, file_url)
-    File.open(file_name, "wb") do |f| 
+    File.open(file_name, "wb") do |f|
         f.write HTTParty.get(
             file_url,
             # we need the auth token, otherwise we have no rights to access the artifact
-            headers: { "Authorization" => "token " + ENV["TOKEN"] } 
+            headers: { "Authorization" => "token " + ENV["TOKEN"] }
         ).body
 
         file_size = File.size(file_name)/1024;
@@ -42,14 +42,14 @@ def download(file_name, file_url)
         puts "File size: #{file_size} KB"
     end
 end
-  
+
 def verify_signature(payload_body)
     signature = 'sha256=' + OpenSSL::HMAC.hexdigest(
-        OpenSSL::Digest.new('sha256'), 
-        ENV["SECRET"], 
+        OpenSSL::Digest.new('sha256'),
+        ENV["SECRET"],
         payload_body
     )
-    
+
     return halt 518, "Bad secret." unless Rack::Utils.secure_compare(
         signature,
         request.env['HTTP_X_HUB_SIGNATURE_256']
