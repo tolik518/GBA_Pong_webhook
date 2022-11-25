@@ -1,3 +1,4 @@
 code/src/artifacts/*.zip
 .env_prd
 .env_dev
+.idea
