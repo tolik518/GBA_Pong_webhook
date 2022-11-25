@@ -1,4 +1,4 @@
-def getpayload()
+def getpayload(folder_name)
     request.body.rewind
     payload_body = request.body.read
     verify_signature(payload_body)
@@ -18,7 +18,7 @@ def getpayload()
         file_url   = artifact["archive_download_url"]
         created_at = artifact["created_at"]
         sha        = workflow["head_sha"][0...7] # this is the commit hash, we only want the first 7 chars
-        file_name  = ENV["FOLDER"] + "#{created_at}_#{sha}.zip"
+        file_name  = folder_name + "#{created_at}_#{sha}.zip"
 
         download(file_name, file_url)
     end

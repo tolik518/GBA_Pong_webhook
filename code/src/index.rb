@@ -19,16 +19,24 @@ set :public_folder, ENV['FOLDER']
 # --------------------------------------- #
 
 post '/github/GBA_Pong_webhook' do
-  getpayload
+  getpayload('GBA_Pong/')
 end
 
 get '/github/GBA_Pong_webhook' do
-  'Is this thing on?'
+  'Nothing here'
+end
+
+post '/github/GBA_Pong_butano_edition_webhook' do
+  getpayload('GBA_Pong_butano_edition/')
+end
+
+get '/github/GBA_Pong_butano_edition_webhook' do
+  'Nothing here'
 end
 
 get '/github/GBA_Pong/' do
   # we only want to show the zip files
-  @files_full = Dir.glob(ENV['FOLDER']+'*.zip')
+  @files_full = Dir.glob('GBA_Pong/'+'*.zip')
 
   @file_sizes   = @files_full.map { |file| "#{(File.size(file)/1024.0).round(2)} KB" }
   @file_names   = @files_full.map { |file| File.basename(file) }
@@ -38,5 +46,20 @@ get '/github/GBA_Pong/' do
 end
 
 get '/github/GBA_Pong/:filename' do |filename|
-  send_file "#{ENV['FOLDER']}#{filename}", :filename => filename, :type => 'Application/octet-stream'
+  send_file "#{'GBA_Pong/'}#{filename}", :filename => filename, :type => 'Application/octet-stream'
+end
+
+get '/github/GBA_Pong_butano_edition/' do
+  # we only want to show the zip files
+  @files_full = Dir.glob('GBA_Pong_butano_edition/'+'*.zip')
+
+  @file_sizes   = @files_full.map { |file| "#{(File.size(file)/1024.0).round(2)} KB" }
+  @file_names   = @files_full.map { |file| File.basename(file) }
+  @upload_dates = @files_full.map { |file| File.mtime(file)}
+
+  erb :files
+end
+
+get '/github/GBA_Pong_butano_edition/:filename' do |filename|
+  send_file "#{'GBA_Pong_butano_edition/'}#{filename}", :filename => filename, :type => 'Application/octet-stream'
 end
