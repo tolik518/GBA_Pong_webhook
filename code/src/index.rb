@@ -12,7 +12,7 @@ Dotenv.load('../../.env_prd')
 
 # needed for sinatra to work properly in my local environment
 set :bind, '0.0.0.0'
-set :public_folder, ENV['FOLDER']
+#set :public_folder, ENV['FOLDER']
 
 # --------------------------------------- #
 #                  routes                 #
